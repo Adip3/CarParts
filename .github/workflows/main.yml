@@ -29,8 +29,8 @@ jobs:
 
       - name: Commit multiple times
         run: |
-          git config user.name "narutostha"
-          git config user.email "bhuwanshrestha475@gmail.com"
+          git config user.name "Adip3"
+          git config user.email "kcadip78@gmail.com"
 
           for i in {1..10}
           do
