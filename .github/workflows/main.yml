@@ -1,0 +1,42 @@
+name: Daily Activity Bot
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # Runs daily (UTC)
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Update files realistically
+        run: |
+          FILES=("README.md" "notes.txt" "data.json")
+
+          FILE=${FILES[$RANDOM % ${#FILES[@]}]}
+
+          if [ "$FILE" = "README.md" ]; then
+            echo "Updated on $(date)" >> README.md
+          elif [ "$FILE" = "notes.txt" ]; then
+            echo "Log: $(date)" >> notes.txt
+          else
+            echo "{ \"updated\": \"$(date)\", \"value\": $RANDOM }" > data.json
+          fi
+
+      - name: Commit multiple times
+        run: |
+          git config user.name "narutostha"
+          git config user.email "bhuwanshrestha475@gmail.com"
+
+          for i in {1..10}
+          do
+            git add .
+            git commit -m "Update $i - $(date)" || echo "No changes"
+          done
+
+      - name: Push changes
+        run: git push
